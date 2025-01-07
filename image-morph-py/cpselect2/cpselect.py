@@ -1,6 +1,7 @@
 import os
 import sys
 
+import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -24,6 +25,8 @@ def cpselect(img_path1, img_path2):
     global img2
     img1 = plt.imread(img_path1) if isinstance(img_path1, str) else np.array(img_path1)
     img2 = plt.imread(img_path2) if isinstance(img_path2, str) else np.array(img_path2)
+    img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
+    img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
 
     app = QApplication(sys.argv)
     cps = _MainWindow()

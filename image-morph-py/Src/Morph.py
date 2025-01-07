@@ -1,4 +1,4 @@
-from Src.OpenCVWarp import AffineWarp
+from Src.AffineWarp import AffineWarp
 
 
 def morph(im1, im2, im1Pts, im2Pts, tri, warpFrac, dissolveFrac):
