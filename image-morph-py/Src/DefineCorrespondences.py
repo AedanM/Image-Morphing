@@ -38,9 +38,20 @@ def DefineCorrespondences(im1, im2, im1PtsPath: Path, im2PtsPath: Path):
     else:
         im1Pts = CSVtoSplitLines(im1PtsPath)
         im2Pts = CSVtoSplitLines(im2PtsPath)
-
+    pts1Out = []
+    pts2Out = []
     # Mean of the two point sets
-    ptsMean = (im1Pts + im2Pts) / 2
+    for pt1, pt2 in zip(im1Pts, im2Pts):
+        xDis = pow(pt2[1] - pt1[1], 2)
+        yDis = pow(pt2[0] - pt1[0], 2)
+        pts1Out.append(pt1)
+        if pow(xDis + yDis, 0.5) < (pt1[0] * 0.01):
+            pts2Out.append(pt1)
+        else:
+            pts2Out.append(pt2)
+    pts1Out = np.array(pts1Out)
+    pts2Out = np.array(pts2Out)
+    ptsMean = (pts1Out + pts2Out) / 2
     tri = Delaunay(ptsMean)
 
-    return im1Pts, im2Pts, tri
+    return pts1Out, pts2Out, tri
