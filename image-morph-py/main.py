@@ -27,11 +27,17 @@ def CheckInputs(startIMG: Path, endIMG: Path, outputDir: Path):
 def Main(
     image1: Path = Path(sys.argv[1]),
     image2: Path = Path(sys.argv[2]),
-    outDir: Path = Path(sys.argv[3]),
+    outDir: Path | None = None,
     frameCount: int = int(sys.argv[4]) if len(sys.argv) > 4 else 30,
     vidLength: float = int(sys.argv[5]) if len(sys.argv) > 5 else 1,
-    saveFrames: bool = bool(sys.argv[6]) if len(sys.argv) > 6 else True,
+    cleanUp: bool = bool(sys.argv[6]) if len(sys.argv) > 6 else True,
 ):
+
+    if outDir is None:
+        outDir = image1.parent
+    else:
+        outDir = Path(outDir)
+
     startImage, endImage = CheckInputs(image1, image2, outDir)
     dstFolder = outDir / image1.stem
     dstFolder.mkdir(exist_ok=True)
@@ -64,8 +70,9 @@ def Main(
             frame += 1
             progBar.next()
     CreateVideoFromFrames(dstFolder, frameCount / vidLength)
-    if not saveFrames:
+    if not cleanUp:
         shutil.rmtree(dstFolder / "Frames")
+        shutil.rmtree(dstFolder / "Points")
 
 
 if __name__ == "__main__":

@@ -11,8 +11,11 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+IMG_1_PTS = []
+IMG_2_PTS = []
 
-def cpselect(img_path1, img_path2):
+
+def cpselect(img_path1, img_path2, img1Pts=None, img2Pts=None):
     """
     Tool for selection a individual number of control points in any two pictures
 
@@ -21,6 +24,17 @@ def cpselect(img_path1, img_path2):
 
     :return: list with a dictionary for each control point
     """
+    global img1
+    global img2
+    global IMG_1_PTS
+    global IMG_2_PTS
+
+    if img1Pts is not None:
+        IMG_1_PTS = img1Pts[:-4]
+
+    if img2Pts is not None:
+        IMG_2_PTS = img2Pts[:-4]
+
     global img1
     global img2
     img1 = plt.imread(img_path1) if isinstance(img_path1, str) else np.array(img_path1)
@@ -258,6 +272,7 @@ class _PlotCanvas(FigureCanvas):
         self.cursorChanged = False
         self.CPlist = []
         self.lastIDP = 0
+        self.LoadExistingPoints()
 
     def plot(self):
         gs0 = self.fig.add_gridspec(1, 2)
@@ -359,9 +374,18 @@ class _PlotCanvas(FigureCanvas):
 
             self.updateCanvas()
 
+    def LoadExistingPoints(self):
+        if IMG_1_PTS is not None and IMG_2_PTS is not None:
+            for p1, p2 in zip(IMG_1_PTS, IMG_2_PTS):
+                cp = _ControlPoint.LoadCoord(p1, p2, self.lastIDP + 1, self)
+                self.CPlist.append(cp)
+                self.cpChanged = True
+                self.lastIDP += 1
+            self.updateCanvas()
+
 
 class _ControlPoint:
-    def __init__(self, idp, x, y, other):
+    def __init__(self, idp, x, y, other, append=True):
         self.img1x = None
         self.img1y = None
         self.img2x = None
@@ -371,8 +395,20 @@ class _ControlPoint:
 
         self.mn = other
         self.mn.CPactive = self
+        if append:
+            self.appendCoord(x, y)
 
-        self.appendCoord(x, y)
+    @classmethod
+    def LoadCoord(cls, img1Pts, img2Pts, idp, other):
+        coord = cls(idp, img1Pts[0], img1Pts[0], other, False)
+        coord.img1x = img1Pts[0]
+        coord.img1y = img1Pts[1]
+        coord.img2x = img2Pts[0]
+        coord.img2y = img2Pts[1]
+        coord.status_complete = True
+        coord.mn.cpActive = None
+
+        return coord
 
     def appendCoord(self, x, y):
 

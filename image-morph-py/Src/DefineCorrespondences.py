@@ -24,20 +24,22 @@ def DefineCorrespondences(im1, im2, im1PtsPath: Path, im2PtsPath: Path):
 
     if not im1PtsPath.exists() or not im2PtsPath.exists():
         results = cpselect(im1, im2)
-        im1Pts = np.array([[x["img1_x"], x["img1_y"]] for x in results])
-        im2Pts = np.array([[x["img2_x"], x["img2_y"]] for x in results])
-        # Append four corners to cover the entire image with triangles
-        im1Pts = np.vstack(
-            [im1Pts, [1, 1], [im1.shape[1], 1], [im1.shape[1], im1.shape[0]], [1, im1.shape[0]]]
-        )
-        im2Pts = np.vstack(
-            [im2Pts, [1, 1], [im2.shape[1], 1], [im2.shape[1], im2.shape[0]], [1, im2.shape[0]]]
-        )
-        im1PtsPath.write_text("\n".join([f"{x[0]},{x[1]}" for x in im1Pts]))
-        im2PtsPath.write_text("\n".join([f"{x[0]},{x[1]}" for x in im2Pts]))
     else:
         im1Pts = CSVtoSplitLines(im1PtsPath)
         im2Pts = CSVtoSplitLines(im2PtsPath)
+        results = cpselect(im1, im2, im1Pts, im2Pts)
+
+    im1Pts = np.array([[x["img1_x"], x["img1_y"]] for x in results])
+    im2Pts = np.array([[x["img2_x"], x["img2_y"]] for x in results])
+    # Append four corners to cover the entire image with triangles
+    im1Pts = np.vstack(
+        [im1Pts, [1, 1], [im1.shape[1], 1], [im1.shape[1], im1.shape[0]], [1, im1.shape[0]]]
+    )
+    im2Pts = np.vstack(
+        [im2Pts, [1, 1], [im2.shape[1], 1], [im2.shape[1], im2.shape[0]], [1, im2.shape[0]]]
+    )
+    im1PtsPath.write_text("\n".join([f"{x[0]},{x[1]}" for x in im1Pts]))
+    im2PtsPath.write_text("\n".join([f"{x[0]},{x[1]}" for x in im2Pts]))
 
     # Mean of the two point sets
     ptsMean = (im1Pts + im2Pts) / 2
