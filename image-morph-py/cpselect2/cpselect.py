@@ -1,11 +1,15 @@
+# type:ignore
+# pylint: skip-file
 import os
 import sys
 
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import \
+    FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import \
+    NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -37,8 +41,12 @@ def cpselect(img_path1, img_path2, img1Pts=None, img2Pts=None):
 
     global img1
     global img2
-    img1 = plt.imread(img_path1) if isinstance(img_path1, str) else np.array(img_path1)
-    img2 = plt.imread(img_path2) if isinstance(img_path2, str) else np.array(img_path2)
+    img1 = (
+        plt.imread(img_path1) if isinstance(img_path1, str) else np.array(img_path1)
+    )  
+    img2 = (
+        plt.imread(img_path2) if isinstance(img_path2, str) else np.array(img_path2)
+    )  
     img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
     img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
 
@@ -233,9 +241,9 @@ class _MainWindow(QMainWindow):
             row = [c1, c2, c3, c4, c5]
 
             for c in row:
-                c.setTextAlignment(Qt.AlignCenter)
-                c.setFlags(Qt.ItemIsEditable)
-                c.setFlags(Qt.ItemIsSelectable)
+                c.setTextAlignment(Qt.AlignCenter)  
+                c.setFlags(Qt.ItemIsEditable)  
+                c.setFlags(Qt.ItemIsSelectable)  
 
             self.cpTabelModel.appendRow(row)
 
@@ -313,15 +321,15 @@ class _PlotCanvas(FigureCanvas):
             idp = str(cp.idp)
 
             if x1:
-                symb1 = plt.Circle((x1, y1), ax11_units * 8, fill=False, color="red")
-                symb2 = plt.Circle((x1, y1), ax11_units * 1, fill=True, color="red")
+                symb1 = plt.Circle((x1, y1), ax11_units * 8, fill=False, color="red")  
+                symb2 = plt.Circle((x1, y1), ax11_units * 1, fill=True, color="red")  
                 self.ax11.text(x1 + ax11_units * 5, y1 + ax11_units * 5, idp)
                 self.ax11.add_patch(symb1)
                 self.ax11.add_patch(symb2)
 
             if x2:
-                symb1 = plt.Circle((x2, y2), ax12_units * 8, fill=False, color="red")
-                symb2 = plt.Circle((x2, y2), ax12_units * 1, fill=True, color="red")
+                symb1 = plt.Circle((x2, y2), ax12_units * 8, fill=False, color="red")  
+                symb2 = plt.Circle((x2, y2), ax12_units * 1, fill=True, color="red")  
                 self.ax12.text(x2 + ax12_units * 5, y2 + ax12_units * 5, idp)
                 self.ax12.add_patch(symb1)
                 self.ax12.add_patch(symb2)
@@ -436,7 +444,7 @@ class _ControlPoint:
             return (
                 str(round(self.idp, 2)),
                 str(round(self.img1x, 2)),
-                str(round(self.img1y, 2)),
+                str(round(self.img1y, 2)),  
                 "",
                 "",
             )
@@ -446,15 +454,15 @@ class _ControlPoint:
                 "",
                 "",
                 str(round(self.img2x, 2)),
-                str(round(self.img2y, 2)),
+                str(round(self.img2y, 2)),  
             )
         else:
             return (
                 str(round(self.idp, 2)),
-                str(round(self.img1x, 2)),
-                str(round(self.img1y, 2)),
-                str(round(self.img2x, 2)),
-                str(round(self.img2y, 2)),
+                str(round(self.img1x, 2)),  
+                str(round(self.img1y, 2)),  
+                str(round(self.img2x, 2)),  
+                str(round(self.img2y, 2)),  
             )
 
     def __str__(self):
