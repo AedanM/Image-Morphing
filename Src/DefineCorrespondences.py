@@ -52,9 +52,9 @@ def DefineCorrespondences(im1, im2, im1PtsPath: Path, im2PtsPath: Path):
             pts2Out.append(pt1)
         else:
             pts2Out.append(pt2)
-    pts1Out = np.array(pts1Out)
-    pts2Out = np.array(pts2Out)
-    ptsMean = (pts1Out + pts2Out) / 2
+    pts1OutNP = np.array(pts1Out)
+    pts2OutNP = np.array(pts2Out)
+    ptsMean = (pts1OutNP + pts2OutNP) / 2
     tri = Delaunay(ptsMean)
 
-    return pts1Out, pts2Out, tri
+    return pts1OutNP, pts2OutNP, tri
