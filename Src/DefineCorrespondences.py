@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import numpy as np
-from cpselect2.cpselect import cpselect
+from PtsCapture.cpselect import cpselect
 from scipy.spatial import Delaunay
 
 
