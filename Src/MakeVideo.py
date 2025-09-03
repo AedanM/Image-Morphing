@@ -1,10 +1,12 @@
+"""Video-ify things."""
+
 from pathlib import Path
 
 import cv2
 
 
-def CreateVideoFromFrames(folder: Path, fps: float = 30.0):
-    # pylint: disable=E1101
+def CreateVideoFromFrames(folder: Path, fps: float = 30.0) -> None:
+    """Generate a video from morph frames."""
     # Get list of image files in the input folder
     frameFolder = folder / "Frames"
     videoDst = folder / f"{folder.stem}.mp4"
@@ -13,7 +15,7 @@ def CreateVideoFromFrames(folder: Path, fps: float = 30.0):
             f
             for f in Path(frameFolder).iterdir()
             if f.is_file() and f.suffix in [".png", ".jpg", ".jpeg"]
-        ]
+        ],
     )
 
     # Read the first image to get the dimensions
@@ -21,7 +23,7 @@ def CreateVideoFromFrames(folder: Path, fps: float = 30.0):
     height, width, _layers = frame.shape
 
     # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*"avc1")  # type:ignore
+    fourcc = cv2.VideoWriter_fourcc(*"avc1")
     video = cv2.VideoWriter(str(videoDst), fourcc, fps, (width, height))
 
     for image in images:

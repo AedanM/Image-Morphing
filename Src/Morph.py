@@ -1,18 +1,32 @@
+"""Morph control."""
+
+from typing import Any
+
 from Src.AffineWarp import AffineWarp
 
 
-def morph(im1, im2, im1Pts, im2Pts, tri, warpFrac, dissolveFrac):
+def morph(
+    im1: Any,
+    im2: Any,
+    im1Pts: Any,
+    im2Pts: Any,
+    tri: Any,
+    warpFrac: float,
+    dissolveFrac: float,
+) -> Any:
     """
     Morph image.
 
-    Parameters:
+    Parameters
+    ----------
     im1, im2: Input images.
     im1_pts, im2_pts: Corresponding points in the images (n-by-2 matrices of (x,y) locations).
     tri: Triangulation structure.
     warp_frac: Fraction for shape warping (0 to 1).
     dissolve_frac: Fraction for cross-dissolve (0 to 1).
 
-    Returns:
+    Returns
+    -------
     morphed_im: The morphed image.
     """
     # Compute intermediate shape points
