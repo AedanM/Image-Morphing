@@ -10,7 +10,7 @@ from scipy.spatial import Delaunay
 
 def CSVtoSplitLines(path: Path) -> Any:
     """Format the csv data."""
-    return np.array([[float(y) for y in x.split(",")] for x in path.read_text().split("\n")])
+    return np.array([[float(y) for y in x.split(",")] for x in path.read_text().splitlines()])
 
 
 def DefineCorrespondences(im1: Any, im2: Any, im1PtsPath: Path, im2PtsPath: Path) -> tuple:
